@@ -9,56 +9,66 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class User(Base):
+class user(Base):
     __tablename__ = "usuarios"
     userID = Column (Integer, primary_key = True)
     name = Column (String (50), nullable = False)
     lastname = Column (String(50), nullable = False)
     password = Column (String(50), nullable = False)
     created_at = Column (DateTime(), default = datetime.now())
-    favorite_relation = relationship("favorites", back_populates="usuarios")
 
+# Personajes-----------------------------------
 
-class Favorite(Base):
-    __tablename__="favorites"
-    favID= Column (Integer, primary_key = True)
-    user_ID = Column (Integer, ForeignKey("usuarios.userID"))
-    user_relation = relationship("usuarios", back_populates="favorites")
-    personaje_relation = relationship("personajes")
-    planet_relation = relationship("planetas")
-    vehicle_relation = relationship("vehiculos")
-    personaje_ID = Column (Integer, ForeignKey ("personajes.personajeID"))
-    planeta_ID = Column (Integer, ForeignKey("planetas.planetaID"))
-    vehiculo_ID = Column (Integer, ForeignKey("vehiculos.vehiculoID"))
-    
-
-class Personaje(Base):
+class personaje(Base):
     __tablename__="personajes"
     personajeID = Column (Integer, primary_key = True)
     name = Column (String(50), nullable = False, unique = True)
     eyed_color = Column(String(50), nullable = False)
     birth_year = Column(String(50), nullable = False)
     gender = Column(String(50), nullable = False)
-    favorite_relation = relationship("favorites")
 
+class favCharacter(Base):
+    __tablename__ = "favChars"
+    favCharID= Column (Integer, primary_key = True)
+    user_ID = Column (Integer, ForeignKey("usuarios.userID"))
+    char_ID = Column (Integer, ForeignKey ("personajes.personajeID"))
+    personaje_relation = relationship("personajes")
+    user_relation = relationship("usuarios", back_populates="favChars")
 
-class Planeta(Base):
-    __tablename__="planetas"
+# Vehículos------------------------------------
+
+class vehiculo(Base):
+    __tablename__= "vehiculos"
+    vehiculoID = Column (Integer, primary_key = True)
+    name = Column(String(50), nullable = False, unique = True)
+    model = Column(String(50), nullable = False)
+
+class favVehicle(Base):
+    __tablename__ = "favVehicles"
+    favVehicleID= Column (Integer, primary_key = True)
+    user_ID = Column (Integer, ForeignKey("usuarios.userID"))
+    vehicle_ID = Column (Integer, ForeignKey ("vehiculos.vehiculoID"))
+    vehicle_relation = relationship("vehiculos")
+    user_relation = relationship("usuarios", back_populates="favVehicles")
+
+# Planetas------------------------------------
+
+class planeta(Base):
+    __tablename__= "planetas"
     planetaID = Column (Integer, primary_key = True)
     name = Column(String(50), nullable = False, unique = True)
     rotated_period = Column(Integer)
     diameter = Column(Integer)
     climate = Column(Integer)
-    favorite_relation = relationship("favorites")
+
+class favPlanet(Base):
+    __tablename__ = "favPlanets"
+    favPlanetID= Column (Integer, primary_key = True)
+    user_ID = Column (Integer, ForeignKey("usuarios.userID"))
+    planet_ID = Column (Integer, ForeignKey ("planetas.planetaID"))
+    planet_relation = relationship("planetas")
+    user_relation = relationship("usuarios", back_populates="favPlanets")
 
 
-class Vehiculo(Base):
-    __tablename__= "vehiculos"
-    vehiculoID = Column (Integer, primary_key = True)
-    name = Column(String(50), nullable = False, unique = True)
-    model = Column(String(50), nullable = False)
-    favorite_relation = relationship("favorites")
-
-    
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
