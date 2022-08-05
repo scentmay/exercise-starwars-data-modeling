@@ -26,6 +26,10 @@ class personaje(Base):
     eyed_color = Column(String(50), nullable = False)
     birth_year = Column(String(50), nullable = False)
     gender = Column(String(50), nullable = False)
+    homeworld = Column(String(50), ForeignKey('planetas.planetaID'))
+    url = Column(String(100), nullable=False)
+    height = Column(Integer)
+    mass = Column(Integer)
 
 class favCharacter(Base):
     __tablename__ = "favChars"
@@ -42,6 +46,10 @@ class vehiculo(Base):
     vehiculoID = Column (Integer, primary_key = True)
     name = Column(String(50), nullable = False, unique = True)
     model = Column(String(50), nullable = False)
+    url = Column(String(100), nullable=False)
+    vehicle_class = Column(String(50), nullable=False)
+    manufacturer = Column(String(50))
+    cargo_capacity = Column(Integer)
 
 class favVehicle(Base):
     __tablename__ = "favVehicles"
@@ -60,6 +68,8 @@ class planeta(Base):
     rotated_period = Column(Integer)
     diameter = Column(Integer)
     climate = Column(Integer)
+    url = Column(String(100), nullable=False)
+    orbital_period = Column(Integer)
 
 class favPlanet(Base):
     __tablename__ = "favPlanets"
